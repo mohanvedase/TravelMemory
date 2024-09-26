@@ -18,23 +18,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Change directory to backend
-      - name: Change to backend directory
-        run: cd backend
-
-
-      # Step 3: Setup Node.js (version 18)
+      # Step 2: Setup Node.js (version 18)
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Use Node.js version 18
+          node-version: '18'
 
+      # Step 3: Change directory to backend
+      - name: Change to backend directory
+        run: cd backend
 
       # Step 4: Install dependencies inside backend directory
       - name: Install dependencies
         run: |
           cd backend
           npm install
+          npm install dotenv  # Install dotenv to load env variables
 
       # Step 5: Create .env file with MongoDB URL and Port in the backend directory
       - name: Create .env file
@@ -42,6 +41,12 @@ jobs:
           cd backend
           echo "MONGO_URL=mongodb+srv://mohan:M%40han%40123@travelmemory.f3do4.mongodb.net/" >> .env
           echo "PORT=3000" >> .env
+
+      # Debug .env file content
+      - name: Debug .env file
+        run: |
+          cd backend
+          cat .env
 
       # Step 6: Run the backend with node index.js
       - name: Run Backend
