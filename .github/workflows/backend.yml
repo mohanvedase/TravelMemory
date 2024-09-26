@@ -1,0 +1,50 @@
+name: Backend Deployment
+
+# Trigger the workflow on push or pull request events
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Change directory to backend
+      - name: Change to backend directory
+        run: cd backend
+
+
+      # Step 3: Setup Node.js (version 18)
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Use Node.js version 18
+
+
+      # Step 4: Install dependencies inside backend directory
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      # Step 5: Create .env file with MongoDB URL and Port in the backend directory
+      - name: Create .env file
+        run: |
+          cd backend
+          echo "MONGO_URL=mongodb+srv://mohan:M%40han%40123@travelmemory.f3do4.mongodb.net/" >> .env
+          echo "PORT=3000" >> .env
+
+      # Step 6: Run the backend with node index.js
+      - name: Run Backend
+        run: |
+          cd backend
+          node index.js
